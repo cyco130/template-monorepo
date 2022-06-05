@@ -1,0 +1,15 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+	echo "Usage: $0 <name>"
+	exit 1
+fi
+
+mv packages/TODO packages/$1
+ln -sf packages/$1/readme.md readme.md
+
+sed -i '' "s/TODO/$1/g" package.json
+sed -i '' "s/TODO/$1/g" packages/$1/package.json
+sed -i '' "s/TODO/$1/g" version
+
+echo "Done. You can now delete this script with:"
+echo "rm init"

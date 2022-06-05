@@ -1,0 +1,21 @@
+{
+  "name": "TODO-workspace-root",
+  "private": "true",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter \"./packages/*\" run dev",
+    "build": "pnpm -r --filter \"./packages/*\" run build",
+    "prepare": "husky",
+    "precommit": "lint-staged",
+    "format": "oxfmt",
+    "ci": "pnpm -r --stream run ci",
+    "test": "pnpm run /^test:/",
+    "test:packages": "pnpm -r --stream run test",
+    "test:format": "oxfmt --check"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "oxfmt": "^0.35.0",
+    "typescript": "^5.9.3"
+  }
+}
