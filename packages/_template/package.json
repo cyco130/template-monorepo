@@ -1,38 +1,30 @@
 {
-  "name": "TODO",
+  "name": "@TODO/template-package",
+  "private": true,
   "version": "0.0.0",
   "description": "TODO",
-  "keywords": [
-    "nextjs",
-    "react",
-    "ssr",
-    "vite"
-  ],
+  "keywords": [],
   "license": "MIT",
   "repository": "github:cyco130/TODO",
   "files": [
-    "dist",
-    "*.d.ts"
+    "dist"
   ],
   "type": "module",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "dist/*.d.ts"
-      ]
-    }
-  },
+  "sideEffects": false,
   "exports": {
     ".": "./dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsdown --clean",
     "dev": "tsdown --watch",
-    "prepack": "rm -rf dist && pnpm build",
+    "prepack": "pnpm build",
     "test": "pnpm run /^test:/",
     "test:unit": "vitest run",
-    "test:typecheck": "tsc -p tsconfig.json --noEmit",
-    "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
+    "test:typecheck": "tsc -p tsconfig.json",
+    "test:lint": "eslint . --max-warnings 0",
     "test:package": "publint"
   },
   "devDependencies": {

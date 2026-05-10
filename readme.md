@@ -1,1 +1,1 @@
-packages/TODO/readme.md
+packages/_template/readme.md

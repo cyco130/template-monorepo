@@ -1,0 +1,11 @@
+{
+  "name": "@TODO/template-example",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@TODO/template-package": "^0.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.39"
+  }
+}

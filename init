@@ -1,15 +1,59 @@
 #!/bin/bash
-if [ -z "$1" ]; then
-	echo "Usage: $0 <name>"
+set -euo pipefail
+
+NAME="${1:-}"
+
+if [ -z "$NAME" ]; then
+	echo "Usage: $0 <name>" >&2
 	exit 1
 fi
 
-mv packages/TODO packages/$1
-ln -sf packages/$1/readme.md readme.md
+if ! [[ "$NAME" =~ ^[a-z0-9][a-z0-9_-]*$ ]]; then
+	echo "Error: name must be lowercase, alphanumeric, with optional '-' or '_' (e.g. my-project)." >&2
+	exit 1
+fi
 
-sed -i '' "s/TODO/$1/g" package.json
-sed -i '' "s/TODO/$1/g" packages/$1/package.json
-sed -i '' "s/TODO/$1/g" version
+# Replace TODO with $NAME in known files
+TODO_FILES=(
+	package.json
+	packages/_template/package.json
+	packages/_template/readme.md
+	packages/_template/src/index.ts
+	packages/_template/src/index.test.ts
+	examples/_template/package.json
+	examples/_template/src/index.ts
+	version
+)
 
-echo "Done. You can now delete this script with:"
-echo "rm init"
+for f in "${TODO_FILES[@]}"; do
+	sed -i '' "s/TODO/$NAME/g" "$f"
+done
+
+# Copy the package template into the first real package
+cp -r packages/_template "packages/$NAME"
+
+# The copy inherited the template's @<NAME>/template-package name; rename to the real name
+# and drop "private": true (real packages are publishable).
+sed -i '' \
+	-e "s|\"@$NAME/template-package\"|\"@$NAME/$NAME\"|" \
+	-e '/^  "private": true,$/d' \
+	"packages/$NAME/package.json"
+
+# Repoint the example template's declared dep at the main package so degit-cloned
+# starters depend on something that actually exists on npm.
+sed -i '' "s|\"@$NAME/template-package\":|\"@$NAME/$NAME\":|" \
+	examples/_template/package.json
+
+# Re-target the root readme symlink to the new package's readme
+ln -sf "packages/$NAME/readme.md" readme.md
+
+# Self-delete; bash continues reading from its open file descriptor.
+rm -- "$0"
+
+# Reinitialize git
+rm -rf .git
+git init -q
+git add .
+git commit -q -m "chore: initialize $NAME monorepo"
+
+echo "Bootstrapped '$NAME' from packages/_template."

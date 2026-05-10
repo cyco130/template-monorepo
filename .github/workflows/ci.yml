@@ -2,10 +2,14 @@ name: CI tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
+  # Auto-triggers are intentionally disabled. This workflow is for e2e tests
+  # living under tests/*, which don't exist by default. Renovate still updates
+  # action versions here. Uncomment the push/pull_request blocks below once you
+  # add the first test package.
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
 
 defaults:
   run:
