@@ -1,9 +1,7 @@
 TODO
 
-## License
+## License and credits
 
-MIT © 2021-present Fatih Aygün and contributors
+MIT license.
 
-## Credits
-
-TODO
+- [Fatih Aygün](https://github.com/cyco130) and [contributors](https://github.com/hattipjs/hattip/graphs/contributors).

@@ -6,6 +6,6 @@
     "@TODO/template-package": "^0.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.19.39"
+    "@types/node": "^22.19.19"
   }
 }
