@@ -8,7 +8,7 @@ Thanks for considering a contribution. For non-obvious conventions and the proje
 pnpm install
 ```
 
-Local development expects the latest minor of the most recent Node LTS, and a recent pnpm. Published packages support a broader range — every current LTS plus the latest current Node — but dev/build scripts may rely on features that landed in recent LTS minors.
+Local development expects the latest minor of the most recent Node LTS, and a recent pnpm. Published packages support a broader range — every LTS plus every Current Node release still maintained upstream — but dev/build scripts may rely on features that landed in recent LTS minors.
 
 Concrete pins live in `engines.node` (`package.json`, the published support range) and the `pnpm/action-setup` step in `.github/workflows/*.yml` (pnpm version). Renovate keeps both current.
 

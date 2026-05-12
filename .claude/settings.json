@@ -7,7 +7,6 @@
 			"Bash(pnpm build)",
 			"Bash(pnpm test)",
 			"Bash(pnpm test:*)",
-			"Bash(pnpm ci)",
 			"Bash(pnpm format)",
 			"Bash(pnpm run:*)",
 			"Bash(pnpm exec:*)",

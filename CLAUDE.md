@@ -30,7 +30,7 @@ These are deliberate. Don't change them without a reason.
 - **Strict TS** with `nodenext` module resolution, `noUncheckedIndexedAccess`, and `noImplicitOverride`.
 - **Relative imports use `.ts` extensions**, not `.js`. Lint enforces this; tsconfigs allow it via `allowImportingTsExtensions`. The point is that source runs natively under Node's TS support and Deno, no transpile step required.
 - **Tabs, 80 cols.** Markdown and `package.json` use 2-space indent (see [.prettierrc](.prettierrc)). Don't reformat with spaces.
-- **Node**: published source in `packages/*/src/` targets the lowest `engines.node` major (every current LTS plus the latest current Node). Dev tooling, build configs, and scripts (e.g. `init`, `tsdown.config.ts`) can assume the latest minor of the most recent LTS — features that landed in recent LTS minors are fair game there; Current-only features aren't. Off-limits inside `packages/*/src/`.
+- **Node**: published source in `packages/*/src/` targets the lowest `engines.node` major (every LTS plus every Current Node release that's still maintained upstream). Dev tooling, build configs, and scripts (e.g. `init`, `tsdown.config.ts`) can assume the latest minor of the most recent LTS — features that landed in recent LTS minors are fair game there; Current-only features aren't. Off-limits inside `packages/*/src/`.
 - **ESLint config** comes from `@cyco130/eslint-config/node`. Lint rules live there, not in-repo.
 
 ## Commands
@@ -40,7 +40,7 @@ Run from the repo root unless noted.
 - `pnpm dev` — watch-build all packages in parallel.
 - `pnpm build` — build all packages.
 - `pnpm test` — runs every script matching `test:*` (uses pnpm's `/^test:/` pattern syntax). Adding a new `test:foo` script auto-joins the suite — no test runner registry to update.
-- `pnpm ci` — per-package CI script (each package decides what its CI pipeline runs).
+- `pnpm run ci` — per-package CI script (each package decides what its CI pipeline runs). Note: bare `pnpm ci` is the clean-install command, not this script.
 - `pnpm format` — Prettier write across the repo.
 
 Inside a package, `pnpm test` similarly fans out to `test:unit` (vitest), `test:typecheck` (`tsc --noEmit`), `test:lint` (eslint), and `test:package` (publint).
