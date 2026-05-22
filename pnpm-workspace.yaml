@@ -1,10 +1,13 @@
+packages:
+  - packages/*
+  - examples/*
+
 strictPeerDependencies: false
 sideEffectsCache: false
 linkWorkspacePackages: true
 
-packages:
-  - packages/*
-  - examples/*
+minimumReleaseAgeExclude:
+  - "@cyco130/eslint-config"
 
 allowBuilds:
   esbuild: true
