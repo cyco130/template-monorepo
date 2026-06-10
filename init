@@ -1,23 +1,26 @@
 #!/bin/bash
 set -euo pipefail
 
-NAME="${1:-}"
+SCOPE="${1:-}"
+PKG="${2:-}"
 
-if [ -z "$NAME" ]; then
-	echo "Usage: $0 <name>" >&2
+if [ -z "$SCOPE" ] || [ -z "$PKG" ]; then
+	echo "Usage: $0 <scope> <package>" >&2
+	echo "  <scope>    npm scope / project name, e.g. acme  -> @acme" >&2
+	echo "  <package>  first package name, e.g. core        -> @acme/core" >&2
 	exit 1
 fi
 
-if ! [[ "$NAME" =~ ^[a-z0-9][a-z0-9_-]*$ ]]; then
-	echo "Error: name must be lowercase, alphanumeric, with optional '-' or '_' (e.g. my-project)." >&2
-	exit 1
-fi
+for arg in "$SCOPE" "$PKG"; do
+	if ! [[ "$arg" =~ ^[a-z0-9][a-z0-9_-]*$ ]]; then
+		echo "Error: '$arg' must be lowercase, alphanumeric, with optional '-' or '_' (e.g. my-project)." >&2
+		exit 1
+	fi
+done
 
-# Replace TODO with $NAME in known files
+# Replace TODO (the project/scope placeholder) with $SCOPE in known files
 TODO_FILES=(
 	package.json
-	packages/_template/package.json
-	packages/_template/readme.md
 	packages/_template/src/index.ts
 	packages/_template/src/index.test.ts
 	examples/_template/package.json
@@ -26,26 +29,34 @@ TODO_FILES=(
 )
 
 for f in "${TODO_FILES[@]}"; do
-	sed -i '' "s/TODO/$NAME/g" "$f"
+	sed -i '' "s/TODO/$SCOPE/g" "$f"
 done
 
-# Copy the package template into the first real package
-cp -r packages/_template "packages/$NAME"
+# Scaffold: rewrite only the scope/repository/contributors URL, leaving the
+# per-package `TODO:` placeholders (description, readme title) for future packages.
+sed -i '' -e "s|@TODO/|@$SCOPE/|g" -e "s|cyco130/TODO|cyco130/$SCOPE|g" \
+	packages/_template/package.json
+sed -i '' "s|cyco130/TODO|cyco130/$SCOPE|g" packages/_template/readme.md
 
-# The copy inherited the template's @<NAME>/template-package name; rename to the real name
-# and drop "private": true (real packages are publishable).
+# Copy the package template into the first real package
+cp -r packages/_template "packages/$PKG"
+
+# The copy inherited the template's @<scope>/template-package name and
+# packages/_template repository directory; rename to the real name, repoint the
+# directory, and drop "private": true (real packages are publishable).
 sed -i '' \
-	-e "s|\"@$NAME/template-package\"|\"@$NAME/$NAME\"|" \
+	-e "s|\"@$SCOPE/template-package\"|\"@$SCOPE/$PKG\"|" \
+	-e "s|\"packages/_template\"|\"packages/$PKG\"|" \
 	-e '/^  "private": true,$/d' \
-	"packages/$NAME/package.json"
+	"packages/$PKG/package.json"
 
 # Repoint the example template's declared dep at the main package so degit-cloned
 # starters depend on something that actually exists on npm.
-sed -i '' "s|\"@$NAME/template-package\":|\"@$NAME/$NAME\":|" \
+sed -i '' "s|\"@$SCOPE/template-package\":|\"@$SCOPE/$PKG\":|" \
 	examples/_template/package.json
 
 # Re-target the root readme symlink to the new package's readme
-ln -sf "packages/$NAME/readme.md" readme.md
+ln -sf "packages/$PKG/readme.md" readme.md
 
 # Self-delete; bash continues reading from its open file descriptor.
 rm -- "$0"
@@ -54,6 +65,6 @@ rm -- "$0"
 rm -rf .git
 git init -q
 git add .
-git commit -q -m "chore: initialize $NAME monorepo"
+git commit -q -m "chore: initialize $SCOPE monorepo"
 
-echo "Bootstrapped '$NAME' from packages/_template."
+echo "Bootstrapped '@$SCOPE/$PKG' from packages/_template."

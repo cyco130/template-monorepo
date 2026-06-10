@@ -2,10 +2,16 @@
   "name": "@TODO/template-package",
   "private": true,
   "version": "0.0.0",
-  "description": "TODO",
+  "description": "TODO: one-line package description",
   "keywords": [],
   "license": "MIT",
-  "repository": "github:cyco130/TODO",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyco130/TODO.git",
+    "directory": "packages/_template"
+  },
+  "homepage": "https://github.com/cyco130/TODO#readme",
+  "bugs": "https://github.com/cyco130/TODO/issues",
   "files": [
     "dist"
   ],

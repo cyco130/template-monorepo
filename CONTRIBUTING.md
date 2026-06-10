@@ -31,7 +31,7 @@ Inside a package, `pnpm test` runs `test:unit` (vitest), `test:typecheck` (tsc),
 
 ## Adding a package
 
-Copy `packages/_template/` to `packages/<name>/`, rename `@<projname>/template-package` to `@<projname>/<name>` in its `package.json`, drop `"private": true`, and run `pnpm install`. Claude Code users: `/new-package <name>` does this in one step.
+Copy `packages/_template/` to `packages/<name>/`, rename `@<projname>/template-package` to `@<projname>/<name>` in its `package.json`, drop `"private": true`, fill in `description`/`keywords` and the `readme.md` `TODO:` placeholders, and run `pnpm install`. Claude Code users: `/new-package <name>` does this in one step.
 
 ## Code style and commits
 

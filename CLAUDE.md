@@ -8,19 +8,22 @@ Markdown in this repo is not manually wrapped. Write one paragraph per line and 
 
 - `packages/*` — publishable libraries. Built with tsdown, published to npm.
 - `examples/*` — consumers of the packages. Not published. Designed to be cloned standalone (e.g. via `degit`), so **dependencies on workspace packages must use real version pins, never `workspace:*`**. The `./version` script keeps those pins in sync with the latest package versions; pnpm still links them locally during dev because of `linkWorkspacePackages: true` in [pnpm-workspace.yaml](pnpm-workspace.yaml).
-- `packages/_template/` and `examples/_template/` — scaffolds. They're real workspace members named `@<projname>/template-package` and `@<projname>/template-example` (both `private: true`) so Renovate keeps their deps current. Both `src/` files are stubs (a single `console.log`) — they don't import or export anything, on purpose: a real working consumer would break the moment the package's API changes. The example template still **declares** a dep on the main published package (`@<projname>/<projname>`) — `init` rewrites this dep when bootstrapping — so degit-cloned starters arrive with the dep wired up. Common scripts (`dev`/`build`/`test`/`ci`) filter the templates out via `!@<projname>/template-*` so they don't fan into normal work.
+- `packages/_template/` and `examples/_template/` — scaffolds. They're real workspace members named `@<projname>/template-package` and `@<projname>/template-example` (both `private: true`) so Renovate keeps their deps current. Both `src/` files are stubs (a single `console.log`) — they don't import or export anything, on purpose: a real working consumer would break the moment the package's API changes. The example template still **declares** a dep on the main published package (`@<projname>/<pkg>`) — `init` rewrites this dep when bootstrapping — so degit-cloned starters arrive with the dep wired up. Common scripts (`dev`/`build`/`test`/`ci`) filter the templates out via `!@<projname>/template-*` so they don't fan into normal work.
 
 The root `readme.md` is a symlink into the primary package's readme. Edit the symlink target, not the symlink.
 
 ## Adding a new package
 
 1. Copy `packages/_template` to `packages/<name>`.
-2. In its `package.json`: rename `@<projname>/template-package` to `@<projname>/<name>`, drop `"private": true`, and update `description`/`repository`.
-3. `pnpm install` from the root.
+2. In its `package.json`: rename `@<projname>/template-package` to `@<projname>/<name>`, drop `"private": true`, and update `description`/`keywords`/`repository` (repoint `repository.directory` to `packages/<name>`).
+3. In its `readme.md`: resolve the `# TODO: package title` heading and the `TODO:` description paragraph.
+4. `pnpm install` from the root.
+
+Claude Code users: `/new-package <name>` does all of this in one step.
 
 Do not start a new package by copying an existing one — `_template` is the canonical scaffold and stays current.
 
-**Naming convention:** every package is scoped under `@<projname>/`, including the main one (`@<projname>/<projname>`). Bare unscoped names are avoided because they're rarely available on npm. Don't introduce a bare-named package without a good reason.
+**Naming convention:** every package is scoped under `@<projname>/`, where `<projname>` is the npm scope / project name. `init` takes two args — `./init <projname> <pkg>` — and creates the first package as `@<projname>/<pkg>`; by convention `<pkg>` is often the same as `<projname>` (`./init acme acme` → `@acme/acme`), but it doesn't have to be (`./init acme core` → `@acme/core`). Bare unscoped names are avoided because they're rarely available on npm. Don't introduce a bare-named package without a good reason.
 
 ## Stack invariants
 
