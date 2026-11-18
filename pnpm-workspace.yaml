@@ -12,14 +12,7 @@ minimumReleaseAgeExclude:
 allowBuilds:
   esbuild: true
   unrs-resolver: true
+
 permissions:
   tsdown:
-    skills: true
-skills:
-  dirs:
-    - .agent/skills
-    - .agents/skills
-    - .claude/skills
-    - .cursor/skills
-    - .gemini/skills
-    - .github/skills
+    skills: false
