@@ -1,5 +1,5 @@
 {
-  "name": "@TODO/template-package",
+  "name": "@todo/template-package",
   "private": true,
   "version": "0.0.0",
   "description": "TODO: one-line package description",
@@ -7,11 +7,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cyco130/TODO.git",
+    "url": "git+https://github.com/cyco130/todo.git",
     "directory": "packages/_template"
   },
-  "homepage": "https://github.com/cyco130/TODO#readme",
-  "bugs": "https://github.com/cyco130/TODO/issues",
+  "homepage": "https://github.com/cyco130/todo#readme",
+  "bugs": "https://github.com/cyco130/todo/issues",
   "files": [
     "dist"
   ],
@@ -34,15 +34,15 @@
     "test:package": "publint"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^9.0.1",
-    "@types/node": "^22.19.19",
-    "eslint": "^10.4.0",
-    "publint": "^0.3.21",
-    "tsdown": "0.22.0",
+    "@cyco130/eslint-config": "^9.0.2",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.15.0",
+    "publint": "^0.3.25",
+    "tsdown": "0.23.7",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^5.1.0"
   },
   "engines": {
-    "node": "22 || 24 || 25 || 26"
+    "node": "22 || 24 || 26"
   }
 }

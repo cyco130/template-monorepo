@@ -18,25 +18,21 @@ for arg in "$SCOPE" "$PKG"; do
 	fi
 done
 
-# Replace TODO (the project/scope placeholder) with $SCOPE in known files
-TODO_FILES=(
-	package.json
-	packages/_template/src/index.ts
-	packages/_template/src/index.test.ts
-	examples/_template/package.json
-	examples/_template/src/index.ts
-	version
-)
-
-for f in "${TODO_FILES[@]}"; do
-	sed -i '' "s/TODO/$SCOPE/g" "$f"
-done
+# Replace the lowercase `todo` project/scope placeholder with $SCOPE. npm package
+# names (and scopes) must be lowercase, so the placeholder is lowercase too. Each
+# pattern is anchored to the exact context it appears in — the scope `@todo/`, the
+# workspace-root name, and the version PROJECT_NAME — so a stray `todo` substring
+# elsewhere can never be clobbered. Uppercase `TODO:` markers (package description,
+# readme title, src stubs) are genuine fill-me-in placeholders, left alone.
+sed -i '' -e "s|@todo/|@$SCOPE/|g" -e "s|todo-workspace-root|$SCOPE-workspace-root|" package.json
+sed -i '' "s|@todo/|@$SCOPE/|g" examples/_template/package.json
+sed -i '' "s|PROJECT_NAME=todo|PROJECT_NAME=$SCOPE|" version
 
 # Scaffold: rewrite only the scope/repository/contributors URL, leaving the
 # per-package `TODO:` placeholders (description, readme title) for future packages.
-sed -i '' -e "s|@TODO/|@$SCOPE/|g" -e "s|cyco130/TODO|cyco130/$SCOPE|g" \
+sed -i '' -e "s|@todo/|@$SCOPE/|g" -e "s|cyco130/todo|cyco130/$SCOPE|g" \
 	packages/_template/package.json
-sed -i '' "s|cyco130/TODO|cyco130/$SCOPE|g" packages/_template/readme.md
+sed -i '' "s|cyco130/todo|cyco130/$SCOPE|g" packages/_template/readme.md
 
 # Copy the package template into the first real package
 cp -r packages/_template "packages/$PKG"

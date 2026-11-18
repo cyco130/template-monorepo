@@ -6,4 +6,4 @@ TODO: one-paragraph description of the package.
 
 MIT license.
 
-- [Fatih Aygün](https://github.com/cyco130) and [contributors](https://github.com/cyco130/TODO/graphs/contributors).
+- [Fatih Aygün](https://github.com/cyco130) and [contributors](https://github.com/cyco130/todo/graphs/contributors).
